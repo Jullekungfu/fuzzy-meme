@@ -126,4 +126,140 @@ Checklist for exam 2014-03-12
   Conclusions       |  Fast                                Safe
   
 *
+  Shadow file - Save password in non-world readible file. Hide hashes.
+    Username
+    Hashed passwords
+    Date of last change
+    Min days between password change
+    Max valid days
+    Days in advance to warn about user change
+    Days account is active after password expire
+    Date of account disabling
+    -Last entry is reserved-
+    
+*
+  Access control in Unix - Discretionary access control, owner of file can change permissions.
+    User - Group - Other
+    Read - Write - Executable
+    Read = List Directory.
+    Write = Delete, rename & insert files in directory.
+    Executable = Access directory ans access files in directory.
+    CHMOD for changes (CHMOD 111 file.txt)
+    
+*
+  Setuid - Set user ID, Used to temporarily change access rights.
   
+*
+  Inode - Stores file information. ls -i gives files with inode pointers
+    Stat file gives detailed inode information.
+    Size          Inode number
+    Access rights
+    Last access
+    Last modification of file
+    Last modification of inode
+    
+*
+  UMASK - Default access rights.
+    Control default permissions.
+    UMASK tells which permissions to exclude by default.
+    Opposite of CHMOD.
+    
+*
+  Searchpaths - When executing programs, system needs to know where to look -> PATH
+    PATH=.:$HOME/bin:/usr/bin:/bin.
+    Trojan horse, if found first, executed instead of program.
+    Current directory in searchpath, bad if executed by root.
+    
+*
+  Hosts.Allow/Hosts.Deny - Files containing pairs to determine Allowed or Denied network access.
+  Check Allow -> Check Deny -> Allow
+  
+8:
+
+*
+  LM & NTLM
+    Problem w/ LM:
+      DES is a fast block cipher
+      No salt
+      Security does not increase after 7 chars
+      No lowercase
+      
+    NTLM is better beacause:
+      More chars
+      All cases
+      
+*
+  Access token - Contains the security credentials fir a login session and identifies the user, users group, the users privileges + other.
+  
+*
+  Privileges - The right to perform system related operations e.g. shutdown.
+    Applies to local computer
+    Differs from access rights
+    Stored in access token.
+    
+*
+  Security descriptor - Data structure that contains security information associated with an object.
+    Owner SID, Primary group SID, DACL, SACL.
+    
+*
+  DACL - Discretionary access control list.
+    Identifies who is allowed/denied access to object
+    No DACL -> full control
+    Empty DACL -> Denied.
+    SID can be allowed/denied.
+    Denies stored in beginning.
+    List of access control entries (ACE).
+    
+    Search:
+      Go through list until ALL requests is allowed, or ANY is denied, otherwise deny.
+      
+    Consequences:
+      Deny has precedence before allow.
+      
+    Windows:
+      User  -r
+      Group rw ------> user rw
+      
+    Unix:
+      User  -r
+      Group rw ------> user -r
+      
+*
+  SACL - System access control list.
+    Specifying types of events that should generate audit records.
+    
+*
+  Access control in networks:
+    Users must go through two access control lists to access file via a share.
+    1st share ACL 2nd file ACL
+    Effective permission is A&B
+    1010 & 1000 -> 1000
+    
+*
+  Access control for restricted token:
+    Group SID used for deny ONLY.
+    Two access checks
+      User
+      Restricted token
+    Both MUST allow.
+    
+9:
+
+*
+  General tracker:
+    Tracker w/o specific target.
+    TODO NOT DONE!!!!
+    
+10:
+
+*
+  Buffer overflow:
+    Find buffer to overflow in a program.
+    Write the exploit
+      Inject code in buffer.
+      Redirect control flow to code.
+    Target stack or heap.
+    
+    
+    TO BE CONTINUED!!!!!!!!!!
+    ----------------------------------------------------------
