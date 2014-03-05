@@ -1,1 +1,129 @@
 Checklist for exam 2014-03-12
+
+
+3:
+
+*
+  Confidentiality -  Prevent unauthorized disclosure of information.
+  Integrity - Prevent unauthorized modification of information.
+  Availability - Prevent unauthorized with-holding of information and resources.
+  Authentication - Act of confirming the truth of an entity, i.e. person/program.
+  Nonrepudiation - A way to guarantee that a sender/reciever cannot deny having sent/receieved a message.
+  Accountability - Users affecting security are held responsible.
+  
+*
+  Data - Physical phenomena
+  Information - What we assign to data
+    Data is used to transit and store information.
+    
+4:
+
+*
+  Spoofing - A way to obtain password. Used when user does not authenticate system.
+  E.g. false login screen.
+  
+*
+  Brute force - Go through all possible passwords.
+  Dictionary - Passwords are often based on words. Normal passwords stored in dictionaries.
+  Time-Memory Tradeoff (TM TO) - In a way brute force. 
+    Preprocessing phase, calculate hashes for number of passwords.
+    Realtime phase, find hash in table, go to starting point -> password.
+    
+*
+  Time-Memory Tradeoff - Pick password, calculate several reductions of hashes. Save start and end in table.
+    T=t² P=N M=mt N=mt² -> N²=M²T P=N
+    
+*
+  Rainbow tables - Improvement of TM TO. Use different reduction funtion for each computation. Fewer collisionchains. One table. Used when hash is known.
+  
+*
+  Salts - Adds uniqueness to passwordhash
+  
+*
+  Help from system - 
+    Password checkers.
+    Automatic password generation.
+    Limit password time
+    Limit Login attempts
+    Show audit information
+    
+*
+  Biometric systems - System that uses biological login information.
+    FRR - False rejection rate
+    FAR - False acceptance rate
+    ERR - Equal error rate
+    ERR -> FAR=FRR
+    
+5:
+
+*
+  Discretionary access control - The owner of an object decides the rights.
+  Mandatory access control - The system decides the rights.
+  
+*
+  Capabilities - List rights from user perspective
+    Ex. Alice: A read, B read, C write.
+    
+  Access control list (ACL) - List rights from file perspective.
+    Ex. A.txt: Alice read, Bob read.
+    
+*
+  Powersets in access control - P(x) is the set of all the subsets in x, partial ordering. TODO NOT DONE!!
+  
+*
+  Lattices - Graphical representation os a partially ordered set.
+    Least upper bound u: a={x} b={y} u= {x,y}
+    Greatest lower bound l: a={x,y} b={x,z} l={x}
+    
+*
+  Reference monitor - Abstract machinery that controls all access to objects.
+  Security kernel - The hardware, software etc. that implements the reference monitor concept.
+  Trusted computing base (TCB) - The set of all protection mechanisms enforcing a security policy.
+
+*
+  Reference monitor:
+  
+                            -------
+                            |Audit|
+                            ---^---
+                               |
+                               |C
+  ---------       A            |           D             -------
+  |Subject|----------------->(RM)----------------------->|Object|
+  ---------                   |^                          -------
+                              ||
+                              ||B
+                          ----V|-----
+                          |Security |
+                          |Kernel   |
+                          |Database |
+                          -----------
+  A: Requests access
+  B: Checks if subject has right to access object
+  C: Writes to audit 
+  D: Grants/Denies access
+  
+  
+*
+  Controlled invocation
+    User wants to execute an operation requiring supervisor mode.
+    Switch modes.
+    System performs predefined sets of operations, returns to user mode, and gives back control.
+    
+*
+  UID Unix:
+    Real - ID of logged in principal, can only be changed by root -> How login works.
+    Effective - ID used for access control. Root can change to anything. Anyone can change to real.
+    
+*
+  Crypts
+                    |  DES crypt         MD5 crypt         bcrypt
+  ---------------------------------------------------------------------------
+  Password length   |  Max 8 chars       Infinity          max 72 chars
+  Salt length       |  12 bits           12-48 bits        128 bits
+  Variable cost     |  No                No                Yes
+  Evals/sec         |  1 000 000         10 000            450
+  Conclusions       |  Fast                                Safe
+  
+*
+  
