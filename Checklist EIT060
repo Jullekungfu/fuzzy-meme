@@ -422,8 +422,10 @@ Checklist for exam 2014-03-12
 
 *
   Stream cipher vs Block ciphers
+    Stream send message bit by bit in a stream.
 
-
+    Block sends larger blocks.
+      Cannot retain states between blocks.
 
 
 *
@@ -437,6 +439,269 @@ Checklist for exam 2014-03-12
 
     OFB - Output feedback
       Turns the block cipher into a stream cipher.
+
+*
+  Symmetric and Asymmetric
+
+                Security Primitives
+                ------------------
+                  |             |
+          Asymmetric            Symmetric
+          (public keys)         (Private key)
+          -------------         -------------
+          |       |             |         |
+    Digital     Ciphers       MAC       Ciphers
+    Signature   -------       ---       -------
+    ---------                           |     |
+                                      Block   Stream
+                                      -----   ------
+
+
+  Symmetric - Same key for encryption and decryption
+
+  Asymmetric - Private + public key
+    Public used to encrypt or verify
+    Private used to decrypt or sign
+
+*
+  Birthday paradox
+    Meaning:
+      How many people do you need in a room such that the probability that two have the same birthday is >0.5
+
+    Consequences:
+      Number of trials before collision with given h(x) is 2^n
+
+      Number of trials before collision with ANY earlier trial is 2^n/2
+
+*
+  Property of MAC functions
+    Defining properties
+      Ease of computation - given parameters
+      Compression
+      Conputation resistance - not given parameters.
+    Does not provide encryption.
+
+*
+  Digital signatures
+    Scheme consists of:
+      Key generation algorithm
+      Signature algorithm
+      Verification algorithm
+
+    Private signature key
+    Public verification key
+
+    Does not provide encryption
+
+    Unlike MAC, it provides nonrepudiation
+
+*
+  El Gamal is based on the discrete logarithm problem.
+
+
+15:
+
+*
+  Terms:
+    Key establishment:
+      Key transport - One party creates/obtains secret key and securely transfers it to the other party (aka key distribution).
+
+      Key agreement - both parties contribute to the generation of the secret key.
+
+    Other:
+      Implicit key authentication
+        One party knows that no one besides a specifically identified second party may gain access to a secret key.
+
+      Key confirmation
+        One party is assured that the second party has possession of a secret key (but identity of the other party may not be known).
+
+      Explicit key authentication
+        Both implicit key authentication and key confirmation.
+
+
+*
+  Replay attacks:
+    Resending an eavesdropped hash will authenticate anyone with the hash.
+    Prevented with nonce (Number used once)
+
+*
+  Certificates
+    Primarily binds a subject name to a public key.
+    Information is signed by CA, Certificate Authority
+    Ca trusted -> certificate trusted.
+
+    Important Certification fields:
+      Version
+      Issuer name
+      Period of validity
+      Subject name
+      Public key information
+      Extensions
+      Signature
+
+    Certificate chain
+      CA->Alice->Bob
+      Bob is certified indirectly by CA via Alice
+
+
+*
+  Diffie-Hellman protocol
+    How it works:
+      A and B do not share any secret in advance.
+      Goal is this shared secret.
+      Agree on two primes
+      Send equation based on these with random number.
+      Compute shared key from this
+
+    Problem:
+      No key authentication - Man-in-the-middle attack
+
+*
+  STS (station-to-station) solves DH
+    Authentication added bu adding signature.
+
+*
+  Other protocols:
+    AKEP2 - TODO DO NOT KNOW NOT DONE!!!!!!!
+
+    EKE - Encrypted key exchange
+      Use a temporary public key encrypted with password to encrypt session key.
+
+    Needham-Schroeder - uses nonce
+      Problem: B does not know if Kab is fresh!
+
+    Kerberos - Like Needham-Schroeder with timestamps and limited lifetime for keys, solves NS problem.
+
+16:
+
+*
+  Traffic analysis-Communication patterns can be found, who is talking to who and how often?
+
+*
+  SSL handshake when RSA is used:
+    Client generates "premaster secret" and uses RSA to encrypt it with public key of server.
+
+    Client Hello
+      Client random
+      Suggested cipher suits
+      Suggested compression
+
+    Server Hello
+      Server random
+      Decided cipher suit
+      Decided compression
+
+    Server
+      sends certificate
+      requests certificate
+      hello done
+
+    Client
+      sends certificate
+      verifies certificate
+      change cipher
+      finish
+
+    Server
+      change cipher
+      finish
+
+*
+  Purpose of random numbers in SSL
+    Provide known seed to the PRF (pseudo random function).
+    Allow both client and server to contribute to key generation (key agreement).
+    Avoid replay attacks.
+
+*
+  IPSec
+    Provides security at network (internet) layer.
+    Mandatory for IPv6, optional for IPv4.
+
+    Authentication header, AH
+    Encapsuling security payload, ESP
+
+    Transport mode
+    Tunnel mode
+
+*
+  Combos
+    AH:
+      Data origin authentication and integrity with MAC
+      Authenticates payload + most of header
+      Prevents replay and IP spoofing
+
+    ESP:
+      Provides confidentiality and/or Authentication.
+      Uses symmetric encryption and MAC
+
+
+    Transport mode:
+      End-to-end security
+      Endpoints must implement IPSec
+      Covers payload only
+      Append new header behind old header.
+
+    Tunnel Mode:
+      Gateway-to-gateway security
+      No need for hosts to implements IPSec
+      Covers entire IP datagram
+
+
+    ESP makes real source and destination unknown to intermediate routers when combined with tunnel mode.
+
+17:
+
+*
+  Packet filters
+    Working on layers 3 (IP) and 4 (TCP/UDP).
+    Packets examined individually.
+    Base filter on ip and port.
+    Permissive policies - Allow all except...
+    Restrictive policies - Deny all except...
+
+    Problem: must allow all ports >1023 in order to allow e.g. ftp, http ...
+
+  Stateful packet filters
+    Solution to above problem:
+      Keep track of connection in a table. Allow incoming packets on ports ports >1023 only if it is in table.
+
+  Application level proxy
+    Relays application-level traffic
+    Sets up own connection to remote host.
+    Can audit and log at application-level
+    Slower than packet filter, higher cost.
+
+*
+  Anomaly detection
+    Uses statistics
+    Attacks are not necessary anomalies
+    Common metrics
+      Counter, Gauge, Interval timer, resource utilization...
+    Finding anomalies
+      Mean and standard deviation.
+      Multivariate
+      Markov process
+      Time series
+      Operational model - What is normal?
+
+  Misuse detection
+    Looks for attack signatures, examining network traffic and logs e.g. failed logins.
+    Uses database for signature.
+    Works well against attacks with fixed behaviour.
+    Race between attackers and signature developers.
+
+*
+  Honeypots
+    Purpose is to:
+      Draw attention away from real system.
+      Collect information on attackers.
+      Encourage attacker to stay in system long enough to be identified.
+
+19: TO BE ANNOUNCED FRIDAY SEMINAR!!!
+
+
+
+
 
     TO BE CONTINUED!!!!!!!!!!
     ----------------------------------------------------------
