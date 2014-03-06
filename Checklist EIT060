@@ -126,7 +126,7 @@ Checklist for exam 2014-03-12
   Conclusions       |  Fast                                Safe
   
 *
-  Shadow file - Save password in non-world readible file. Hide hashes.
+  Shadow file - Save password in non-world readable file. Hide hashes.
     Username
     Hashed passwords
     Date of last change
@@ -141,9 +141,11 @@ Checklist for exam 2014-03-12
   Access control in Unix - Discretionary access control, owner of file can change permissions.
     User - Group - Other
     Read - Write - Executable
+    
     Read = List Directory.
     Write = Delete, rename & insert files in directory.
     Executable = Access directory ans access files in directory.
+    
     CHMOD for changes (CHMOD 111 file.txt)
     
 *
@@ -184,12 +186,12 @@ Checklist for exam 2014-03-12
       Security does not increase after 7 chars
       No lowercase
       
-    NTLM is better beacause:
+    NTLM is better because:
       More chars
       All cases
       
 *
-  Access token - Contains the security credentials fir a login session and identifies the user, users group, the users privileges + other.
+  Access token - Contains the security credentials for a login session and identifies the user, users group, the users privileges + other.
   
 *
   Privileges - The right to perform system related operations e.g. shutdown.
@@ -260,6 +262,181 @@ Checklist for exam 2014-03-12
       Redirect control flow to code.
     Target stack or heap.
     
+  Memory                  Stack
+  --------------      /   ---------------
+  |Kernel code  |   /     |Function     |
+  |& data       |  /      |Parmeters    |
+  ----------------        ---------------
+  |Stack  |               |Return address
+  |       V               ---------------
+  ----------------        |Saved frame  |
+  |Extra memory | \       |Pointer      |
+  --------------    \     ---------------
+  |       ^     |     \   |Local        |
+  |Heap   |     |       \ |Variables    |
+  --------------          |             |
+  |Global data  |         ---------------
+  --------------
+  |Program      |
+  |machine      |
+  |code         |
+  --------------
+
+
+  How does it work?
+    Copy a large buffer into a small buffer.
+    If length is not checked, data will be overwritten.
+    Strcpy() does not check.
+    Will overwrite return address.
+    If return address is outside process space, result in segmantation fault.
+    If dangerous code within process space -> able to run.
+    Prepend NOP when attacking other program to make the guess easier.
+
+  Detection:
+    Usage of Canary value between local variables and sfp.
+    If changed -> terminate.
+    Include option -fstack-protector in GCC
+
+  Prevention:
+    Do not use unsafe functions.
+    Mark stack as non executable.
+    Use address space layout randomization.
+    Java instead of C or C++. (JVM can be written in C though).
+
+*
+  SQL-injections Code injection technique.
+    By inserting malicous SQL statements into an entry field for execution.
+
+    Ex. input: '; drop table users;--
+      can result in SQL query:
+        $QUERY=SELECT * FROM users WHERE name = ''; drop table users;--';
+
+    Prevention:
+      Excape quotes.
+      Check syntax using rewular expression.
+      Turn off error reporting when not debugging.
+      Use table and column names that are hard to guess.
+      Name form fields different from columns.
+
+11.1-11.2 & 12.1-12.3:
+
+*
+  Bell-LaPadula properties:
+    ss-property - Simple security property.
+      Mandatory access control
+      No read-up: A user is not allowed read (observe) access to objects with higher security level.
+
+    *-property - Star property.
+      Mandatory access control.
+      Does not apply to trusted subjects.
+      No write down: A user is not allowed write (alter) access to objects with lower security level than the current level of subject.
+
+    ds-property - 
+      Discretionary access control.
+      Subject may pass an access permission on to other users.
+      Access rights given in access control matrix must also be followed.
+
+*
+  Tranquility in Bell-LaPadula
+    Security levels and access rights never change.
+
+*
+  Biba difference from Bell
+    Subject and objects mapped to integrity  levels forming a lattice.
+    TODO NOT DONE DO NOT KNOW!!!!
+
+*
+  Integrity levels Biba
+    Automatically adjusted.
+
+    - Subject s read Object o at any integrity level.
+      New integrity level of subject is the greatest lower bound of Fs(s) and Fo(o)
+
+    - Subject s modify Object o at any integrity level.
+      New integrity level of Object is the greatest lower bound of Fs(s) and Fo(o)
     
+
+*
+  Clark-Wilson focuses on integrity!
+
+13:
+
+*
+  Security evaluation
+    Strengths:
+    Limits:
+    TODO DO NOT KNOW NOT DONE!!!!!
+
+*
+  Functionality and assurance for products
+    Orange book
+      Uses evaluation classes that combine the two.
+
+    ITSEC
+      Security functions specified individually or by predefined functionality class.
+      Assurance??
+
+    Common Criteria
+      Security Functional requirements
+      Ecaluation assurance level, package of assurance requirements. 7 levels total.
+
+      TODO NOT DONE!!!!!
+
+
+*
+  Classification of products
+    Orange book
+
+    ITSEC
+
+    Common criteria
+
+    TODO DO NOT KNOW NOT DONE!!!!!
+
+14:
+
+*
+  Empirically secure
+    Secure based on the fact that no one has broken it for sometime.
+
+  Provably secure
+    We prove that breaking a scheme is at least as hard as breaking som well known problem like factoring or deiscrete log.
+
+  Unconditionally secure
+    The schemes are secure even if the adversary has unlimited computing power.
+
+*
+  Kerckhoff's principle
+    Only the key should be unknown to an adversary.
+      Security should not be based on the fact that an algorithm is secret.
+
+*
+  Stream ciphers and One time pads (OTP)
+    Stream cipher
+      Take a short random key and sxpand it to a long pseudorandom sequence of bits.
+
+    OTP
+      Different substitutions for every character
+
+    "Stream cipher is a number of OTP that repeats"
+
+*
+  Stream cipher vs Block ciphers
+
+
+
+
+*
+  Block cipher modes
+    ECB - Electric code book
+      All blocks encrypted independently of eachother.
+      Redundancy preserved.
+
+    CBC - Cipher block chaining
+      Redundancy removed.
+
+    OFB - Output feedback
+      Turns the block cipher into a stream cipher.
+
     TO BE CONTINUED!!!!!!!!!!
     ----------------------------------------------------------
